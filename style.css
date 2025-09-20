@@ -1,0 +1,139 @@
+/* 測試用 */
+.bg_view {
+    background-color: brown;
+}
+
+.mainCountrain {
+    position: relative;
+    width: auto;
+    height: 1000px;
+    display: block;
+    background-color: #ffe1c9;
+    text-align: center;
+}
+
+
+
+/* 按鈕相關 */
+.divbtn {
+    font-size: 100px;
+    display: inline-flex;
+    /* flex-direction: column; */
+    justify-content: center;
+
+}
+
+
+
+/* 定位用 */
+
+.OutCountrain {
+    position: relative;
+    display: block;
+    width: auto;
+    height: 100px;
+    background-color: bisque;
+    opacity: 50%;
+}
+
+#divbtn_1 {
+    position: absolute;
+    left: 10%;
+    top: 0;
+}
+
+#divbtn_2 {
+    position: absolute;
+    left: 30%;
+    top: 0;
+}
+
+#divbtn_3 {
+    position: absolute;
+    left: 50%;
+    top: 0;
+}
+
+#divbtn_4 {
+    position: absolute;
+    left: 70%;
+    top: 0;
+}
+
+#divbtn_5 {
+    position: absolute;
+    left: 90%;
+    top: 0;
+}
+
+.anihover:hover
+{
+    scale: 1.2;
+    color: rgb(36, 17, 17);
+    cursor: pointer;
+    image-rendering: auto;
+}
+
+
+
+/* 圖片 */
+.autoimg {
+    position: relative;
+}
+
+.autoimg #img_1 {
+    position: absolute;
+    display: none;
+    right: 50%;
+}
+
+.autoimg #img_2 {
+    position: absolute;
+    right: 50%;
+}
+
+.autoimg #img_3 {
+    position: absolute;
+    right: 50%;
+}
+
+.autoimg #img_4 {
+    position: absolute;
+    right: 50%;
+}
+
+
+
+
+
+/* 表格 */
+
+
+
+
+#divtable_1
+{
+    display: none;
+}
+
+
+
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 800px;
+    margin: auto;
+    background-color: white;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 12px;
+    text-align: left;
+  }
+  th {
+    background-color: #f7c59f;
+  }
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
