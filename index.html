@@ -50,6 +50,7 @@
     }
 
     #ButtonPanel button {
+      pointer-events: auto;
       text-align: center;
       width: 20%;
       height: auto;
@@ -68,6 +69,7 @@
   }
 }
 </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 </head>
 
 
@@ -105,6 +107,7 @@
     let placedMesh = new THREE.Group();  //空物件 手勢控制用
     let FireAni = null;
     let PieAni = null;
+    let IsPlay_Ani_Pie = false;
 
     // 相機
     const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -132,14 +135,16 @@
     // 載入模型
     const loader = new GLTFLoader();
 
+    // 控制器
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+
+
 
     function Main() {
 
       placedMesh.position.set(0, 0, 0);
       scene.add(placedMesh);
-
-
-
 
       //餡餅
       loader.load(
@@ -158,7 +163,7 @@
 
       //鍋子+火
       loader.load(
-      
+
         "Model/Pot.glb",
         (gltf) => {
           FireAni = Set_Model_Attribute(gltf);
@@ -171,33 +176,71 @@
           console.error("載入失敗：", error);
         }
       );
+
+
+
+      // 視窗大小自適應
+      window.addEventListener("resize", () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+
     }
 
 
-    // 控制器
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-
-    // 視窗大小自適應
-    window.addEventListener("resize", () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-
     function DOMCtrl() {
-       console.log("dom");
       //dom賦值
       const big_fire = document.getElementById("big_fire")
       const small_fire = document.getElementById("small_fire")
       const turn = document.getElementById("turn")
 
-      big_fire.addEventListener("click", () => { FireAni.play(); console.log("1"); })
-      small_fire.addEventListener("click", () => { FireAni.play(); console.log("2");})
-      turn.addEventListener("click", () => { PieAni.play(); console.log("3");})
+      big_fire.addEventListener("click", () => { FireAni.play(); })
+      small_fire.addEventListener("click", () => { GSAP_toggleBounce("big_fire", true) })
+      turn.addEventListener("click", () => {
+        IsPlay_Ani_Pie = !IsPlay_Ani_Pie;
+        if (IsPlay_Ani_Pie) {
+          PieAni.play();
+        } else {  
+          PieAni.stop();
+        }
+
+      })
 
     }
 
+
+    function GSAP_toggleBounce(id, show) {
+      const el = document.getElementById(id);
+      if (!el) return;
+
+      if (show) {
+        // 顯示並彈跳出現
+        el.style.display = "block";
+        gsap.fromTo(el,
+          { scale: 0, y: 50, opacity: 0 },
+          {
+            scale: 1,
+            y: 0,
+            opacity: 1,
+            duration: 0.6,
+            ease: "bounce.out"
+          }
+        );
+      } else {
+        // 縮小並消失
+        gsap.to(el, {
+          scale: 0,
+          y: 50,
+          opacity: 0,
+          duration: 0.4,
+          ease: "power2.in",
+          onComplete: () => {
+            el.style.display = "none";
+          }
+        });
+      }
+    }
 
     //設定model相關參數(不需要使用 scene.add(_model)，因為作為容器的placedMesh已經實作了)
     function Set_Model_Attribute(gltf, AniIndex = 0) {
@@ -232,6 +275,8 @@
       mixers.forEach(mixer => mixer.update(delta));
       renderer.render(scene, camera);
     }
+
+
     Main();
     DOMCtrl();
     animate();
